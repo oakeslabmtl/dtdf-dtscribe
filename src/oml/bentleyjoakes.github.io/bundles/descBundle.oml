@@ -1,0 +1,12 @@
+description bundle <https://bentleyjoakes.github.io/bundles/descBundle#> as descBundle {
+	
+	includes <https://bentleyjoakes.github.io/LLM_described_DT/llm_dt#>
+//	includes <https://bentleyjoakes.github.io/incubator/incubator_pt#>
+//	includes <https://bentleyjoakes.github.io/incubator/incubator_deploy#>
+	
+//	includes <https://bentleyjoakes.github.io/incubator/incubatorKalmanFilter#>
+//	includes <https://bentleyjoakes.github.io/domains/state_estimation/stateEstimationDescBase#>
+	
+//	includes <https://bentleyjoakes.github.io/flexcell/flexcell_dt#>
+	uses <https://bentleyjoakes.github.io/bundles/vocabBundle#>
+}

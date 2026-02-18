@@ -1,0 +1,343 @@
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+    color: var(--text-primary);
+    text-decoration-skip-ink: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* === CSS VARIABLES === */
+  :root {
+    /* Colors */
+    --text-primary: #333333;
+    --text-secondary: #5c5c5c;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f9f9f9;
+    --accent: #4361ee;
+    --code-bg: #f7f7f7;
+    --border: #e0e0e0;
+    
+    /* Typography */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-serif: 'Fraunces', Georgia, serif;
+    --font-mono: 'JetBrains Mono', Consolas, 'Liberation Mono', Menlo, monospace;
+    
+    /* Spacing */
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2.5rem;
+    --space-xl: 4rem;
+    
+    /* Container */
+    --max-width: 80%; /* Updated from 800px to 80% for wider layout */
+  }
+
+  /* === DARK MODE === */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --text-primary: #efefef;
+      --text-secondary: #b0b0b0; 
+      --bg-primary: #121212;
+      --bg-secondary: #1e1e1e;
+      --accent: #738cff;
+      --code-bg: #2a2a2a;
+      --border: #383838;
+    }
+  }
+
+  /* === TYPOGRAPHY === */
+  body {
+    font-family: var(--font-sans);
+    font-size: 18px;
+    line-height: 1.7;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+  }
+
+  /* Headings */
+  h1, h2, h3 {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-sm);
+  }
+
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 2rem; }
+  h3 { font-size: 1.5rem; }
+
+  /* Text elements */
+  p { margin: var(--space-md) 0; }
+  
+  strong { font-weight: 600; }
+  
+  em, dfn, q { font-style: italic; }
+  
+  del, s { text-decoration: line-through; }
+
+  /* Links */
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease;
+  }
+
+  a:hover {
+    border-bottom-color: var(--accent);
+  }
+
+  h1 a, h2 a, h3 a {
+    text-decoration: none;
+    border-bottom: none;
+  }
+
+  /* === LAYOUT ELEMENTS === */
+  /* Spacing */
+  hr {
+    height: 1px;
+    background: var(--border);
+    width: 40%;
+    margin: var(--space-lg) auto;
+  }
+
+  /* Lists */
+  ul, ol {
+    margin: var(--space-md) 0;
+    padding-left: var(--space-lg);
+  }
+
+  ul li {
+    list-style-type: none;
+    position: relative;
+  }
+
+  ul li::before {
+    content: "•";
+    color: var(--accent);
+    position: absolute;
+    left: -1.2em;
+  }
+
+  /* Navigation */
+  #nav {
+    margin-top: var(--space-xl);
+    text-align: center;
+  }
+
+  #nav h1 a {
+    font-size: 2.2rem;
+    color: var(--text-primary);
+  }
+
+  #nav ul {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-md);
+    margin: var(--space-sm) auto;
+    padding: 0;
+  }
+
+  #nav li {
+    list-style-type: none;
+    font-size: 1rem;
+  }
+
+  #nav li::before { content: none; }
+
+  /* === CONTENT === */
+  #content {
+    padding: var(--space-xl) 0;
+    font-size: 1.1rem;
+  }
+
+  .posts_listing {
+    margin-bottom: var(--space-xl);
+  }
+
+  .posts_listing li {
+    margin-bottom: var(--space-md);
+  }
+
+  .date {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+  }
+
+  /* === MEDIA === */
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: var(--space-md) auto;
+    border-radius: 4px;
+  }
+
+  .left-justify { float: left; margin-right: var(--space-md); }
+  .right-justify { float: right; margin-left: var(--space-md); }
+
+  /* Image zoom functionality */
+  .zoom-container {
+    position: relative;
+    overflow: visible;
+    width: 100%;
+    cursor: zoom-in;
+  }
+
+  .zoomable-image {
+    width: 100%;
+    transition: transform 0.2s ease;
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-content {
+    max-width: 90%;
+    max-height: 90%;
+    transition: transform 0.3s ease;
+  }
+
+  .close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+  }
+
+  /* === CODE === */
+  pre, code {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    background-color: var(--code-bg);
+    border-radius: 3px;
+  }
+
+  code {
+    padding: 0.15em 0.3em;
+  }
+
+  pre {
+    padding: var(--space-md);
+    margin: var(--space-md) 0;
+    overflow: auto;
+    line-height: 1.45;
+  }
+
+  pre code {
+    padding: 0;
+    background: transparent;
+    border: 0;
+    white-space: pre;
+  }
+
+  /* === BLOCKQUOTES === */
+  blockquote {
+    font-family: var(--font-serif);
+    border-left: 3px solid var(--accent);
+    padding: var(--space-md) var(--space-lg);
+    margin: var(--space-md) 0;
+    background-color: var(--bg-secondary);
+    border-radius: 0 4px 4px 0;
+  }
+
+  blockquote p {
+    font-style: italic;
+  }
+
+  /* === TABLES === */
+  .table-responsive {
+    overflow-x: auto;
+    margin: var(--space-md) 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  th, td {
+    padding: var(--space-sm);
+    border: 1px solid var(--border);
+    text-align: left;
+  }
+
+  th {
+    background-color: var(--bg-secondary);
+    font-weight: 600;
+  }
+
+  /* === RESPONSIVE DESIGN === */
+  /* Tablet */
+  @media (max-width: 768px) {
+    :root {
+      --max-width: 95%;
+    }
+    
+    body {
+      font-size: 17px;
+    }
+
+    h1 { font-size: 2.2rem; }
+    h2 { font-size: 1.8rem; }
+    h3 { font-size: 1.3rem; }
+
+    #content {
+      padding-top: var(--space-lg);
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 480px) {
+    body {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    h1 { font-size: 1.8rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.2rem; }
+
+    #nav h1 a {
+      font-size: 1.8rem;
+    }
+
+    #nav ul {
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .posts_listing li div {
+      font-size: 0.9rem;
+    }
+    
+    blockquote {
+      padding: var(--space-sm) var(--space-md);
+    }
+  }
+</style>

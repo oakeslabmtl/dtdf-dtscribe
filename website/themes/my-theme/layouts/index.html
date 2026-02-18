@@ -1,0 +1,73 @@
+{{ partial "header.html" . }}
+
+<h2>DT Interactive Constellation</h2>
+
+<br>
+
+<script>
+    // Global variable that Godot can access
+    window.dataReady = null;
+    
+    async function fetchData() {
+        try {
+            const res = await fetch('{{ .Site.BaseURL }}data_dump.yaml');
+            const text = await res.text();
+            console.log('✅ YAML data fetched and ready');
+            window.dataReady = text; // Make it globally accessible
+        } catch (error) {
+            console.error('❌ Error fetching data:', error);
+        }
+    }
+    
+    fetchData();
+</script>
+
+<div style="width: 100%; aspect-ratio: 16 / 9;">
+    <iframe 
+        id="godot-iframe"
+        src="{{ .Site.BaseURL }}DTInsight_web_export/DTInsight.html" 
+        style="width: 100%; height: 100%; border:none;">
+    </iframe>
+</div>
+
+<h2>DT Characteristics Table</h2>
+
+<br>
+
+<section id="table-responsive">
+  {{ partial "characteristics-table.html" . }}
+</section>
+
+<h2>DT Constellation Screenshot</h2>
+
+<br>
+
+<section id="architecture">
+  <div class="zoom-container">
+    <img src="{{ .Site.BaseURL }}images/architecture.png" alt="Architecture Diagram" class="zoomable-image">
+  </div>
+</section>
+
+<!-- Modal for clicking on the image -->
+<div id="image-modal" class="modal">
+  <span class="close">&times;</span>
+  <img class="modal-content" id="modal-image">
+</div>
+
+<section id="content">
+  <ul class="posts_listing">
+    {{ range .Site.RegularPages }}
+      <li>
+        <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+        <div class="date">
+          {{if not .Date.IsZero }}
+            {{ .Date.Format (.Site.Params.dateform | default "January 2006") }}
+          {{end}}
+        </div>
+      </li>
+    {{ end }}
+  </ul>
+</section>
+
+{{ partial "footer.html" . }}
+
