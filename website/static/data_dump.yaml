@@ -1,212 +1,212 @@
 Services :
-	RemoteManagementService
-		type : NamedIndividual/Service/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/TimeScaleThing/ConceptInstance
-		provides : AdjustDesiredSpeedAction/EmergencyBrakeAction/EnableACCAction
-		desc : Allows operator to enable/disable ACC, adjust desired speed, and trigger emergency braking.
-		sameAs : RemoteManagementService
-		enabledBy : ActuationEnabler
-	ComputationOffloadingService
-		type : NamedIndividual/Service/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/TimeScaleThing/ConceptInstance
-		provides : DeliverDesiredSpeedCommandAction/VehicleTrackInsight
-		desc : Offloads ACC algorithm computation, including lead‑vehicle detection and command delivery.
-		sameAs : ComputationOffloadingService
-		enabledBy : ControllingEnabler/DataPreProcessingEnabler
 	DataMonitoringService
-		type : NamedIndividual/Service/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/TimeScaleThing/ConceptInstance
-		provides : VehicleTrackInsight/PerformanceAnalysisInsight/RealTimeVehicleStateInsight
-		desc : Provides real‑time monitoring of vehicle state, includes 3D visualization and reporting to operators.
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/DTComponent/TimeScaleThing/Service/NamedIndividual/ConceptInstance
 		sameAs : DataMonitoringService
+		desc : Provides real‑time monitoring of vehicle state, includes 3D visualization and reporting to operators.
 		enabledBy : DataTranslationEnabler/VisualizationEnabler/ReportingEnabler
+		provides : VehicleTrackInsight/RealTimeVehicleStateInsight/PerformanceAnalysisInsight
+	RemoteManagementService
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/DTComponent/TimeScaleThing/Service/NamedIndividual/ConceptInstance
+		sameAs : RemoteManagementService
+		desc : Allows operator to enable/disable ACC, adjust desired speed, and trigger emergency braking.
+		enabledBy : ActuationEnabler
+		provides : EnableACCAction/EmergencyBrakeAction/AdjustDesiredSpeedAction
+	ComputationOffloadingService
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/DTComponent/TimeScaleThing/Service/NamedIndividual/ConceptInstance
+		sameAs : ComputationOffloadingService
+		desc : Offloads ACC algorithm computation, including lead‑vehicle detection and command delivery.
+		enabledBy : DataPreProcessingEnabler/ControllingEnabler
+		provides : DeliverDesiredSpeedCommandAction/VehicleTrackInsight
 Enablers :
-	ControllingEnabler
-		type : NamedIndividual/Enabler/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/ConceptInstance
-		enables : ComputationOffloadingService
-		desc : Runs the ACC control algorithm and delivers desired speed commands.
-		sameAs : ControllingEnabler
-		hasInput : ACCControlAlgorithmModel/ObjectTrackData/PredictedPathData/VehicleSpeedSignal
-	ActuationEnabler
-		type : NamedIndividual/Enabler/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/ConceptInstance
-		enables : RemoteManagementService
-		desc : Converts desired speed and steering‑angle signals into motor voltage signals for the Vedder Electronic Speed Controller and steering servo.
-		sameAs : ActuationEnabler
-		hasInput : VehicleSteeringAngleSignal
 	DataPreProcessingEnabler
-		type : NamedIndividual/Enabler/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/ConceptInstance
-		enables : ComputationOffloadingService
-		desc : Executes DBSCAN clustering and Kalman‑filter tracking on LiDAR point‑cloud data.
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/DTComponent/Enabler/NamedIndividual/ConceptInstance
 		sameAs : DataPreProcessingEnabler
-		hasInput : DepthImageData/KalmanFilterTrackingModel/LiDARPointCloudData/ObjectTrackData/PointCloudClusteringModel
+		desc : Executes DBSCAN clustering and Kalman‑filter tracking on LiDAR point‑cloud data.
+		enables : ComputationOffloadingService
+		hasInput : DepthImageData/LiDARPointCloudData/PointCloudClusteringModel/ObjectTrackData/KalmanFilterTrackingModel
 	DataTranslationEnabler
-		type : NamedIndividual/Enabler/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/ConceptInstance
-		enables : DataMonitoringService
-		desc : Serialises, units‑converts, and frames data between the PT and DT over ROS 2/UDP.
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/DTComponent/Enabler/NamedIndividual/ConceptInstance
 		sameAs : DataTranslationEnabler
-		hasInput : DepthImageData/LiDARPointCloudData/VehicleSpeedSignal
+		desc : Serialises, units‑converts, and frames data between the PT and DT over ROS 2/UDP.
+		enables : DataMonitoringService
+		hasInput : DepthImageData/VehicleSpeedSignal/LiDARPointCloudData
 	VisualizationEnabler
-		type : NamedIndividual/Enabler/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/ConceptInstance
-		enables : DataMonitoringService
-		desc : Renders 3D visualization of vehicle, object tracks, and predicted path.
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/DTComponent/Enabler/NamedIndividual/ConceptInstance
 		sameAs : VisualizationEnabler
-		hasInput : PredictedPathData/Visualization3DModel
-	ReportingEnabler
-		type : NamedIndividual/Enabler/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/ConceptInstance
+		desc : Renders 3D visualization of vehicle, object tracks, and predicted path.
 		enables : DataMonitoringService
-		desc : Generates real‑time reports and stores vehicle data in a SQL database.
+		hasInput : Visualization3DModel/PredictedPathData
+	ActuationEnabler
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/DTComponent/Enabler/NamedIndividual/ConceptInstance
+		sameAs : ActuationEnabler
+		desc : Converts desired speed and steering‑angle signals into motor voltage signals for the Vedder Electronic Speed Controller and steering servo.
+		enables : RemoteManagementService
+		hasInput : VehicleSteeringAngleSignal
+	ControllingEnabler
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/DTComponent/Enabler/NamedIndividual/ConceptInstance
+		sameAs : ControllingEnabler
+		desc : Runs the ACC control algorithm and delivers desired speed commands.
+		enables : ComputationOffloadingService
+		hasInput : VehicleSpeedSignal/PredictedPathData/ObjectTrackData/ACCControlAlgorithmModel
+	ReportingEnabler
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/DTComponent/Enabler/NamedIndividual/ConceptInstance
 		sameAs : ReportingEnabler
+		desc : Generates real‑time reports and stores vehicle data in a SQL database.
+		enables : DataMonitoringService
 		hasInput : VehicleDataStorageModel/VehicleStateReportingModel
 Models :
-	ACCControlAlgorithmModel
-		type : NamedIndividual/Model/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/Input/ConceptInstance
-		inputTo : ControllingEnabler
-		desc : Implements ACC control algorithm fulfilling ISO 15622 requirements.
-		sameAs : ACCControlAlgorithmModel
-	KalmanFilterTrackingModel
-		type : NamedIndividual/Model/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/Input/ConceptInstance
-		inputTo : DataPreProcessingEnabler
-		desc : Applies Kalman‑filter tracking to clustered points to produce consistent object tracks.
-		sameAs : KalmanFilterTrackingModel
-	PointCloudClusteringModel
-		type : NamedIndividual/Model/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/Input/ConceptInstance
-		inputTo : DataPreProcessingEnabler
-		desc : Performs DBSCAN clustering on raw point‑cloud data.
-		sameAs : PointCloudClusteringModel
-	VehicleDataStorageModel
-		type : NamedIndividual/Model/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/Input/ConceptInstance
-		inputTo : ReportingEnabler
-		desc : Persists vehicle state and object track data in a SQL database.
-		sameAs : VehicleDataStorageModel
-	VehicleStateReportingModel
-		type : NamedIndividual/Model/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/Input/ConceptInstance
-		inputTo : ReportingEnabler
-		desc : Generates real‑time vehicle state reports and stores data in a SQL database.
-		sameAs : VehicleStateReportingModel
 	Visualization3DModel
-		type : NamedIndividual/Model/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/Input/ConceptInstance
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/Input/DTComponent/Model/NamedIndividual/ConceptInstance
+		sameAs : Visualization3DModel
 		inputTo : VisualizationEnabler
 		desc : Renders 3D visualization of vehicle state, surrounding object tracks, and predicted driving path.
-		sameAs : Visualization3DModel
+	VehicleDataStorageModel
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/Input/DTComponent/Model/NamedIndividual/ConceptInstance
+		sameAs : VehicleDataStorageModel
+		inputTo : ReportingEnabler
+		desc : Persists vehicle state and object track data in a SQL database.
+	VehicleStateReportingModel
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/Input/DTComponent/Model/NamedIndividual/ConceptInstance
+		sameAs : VehicleStateReportingModel
+		inputTo : ReportingEnabler
+		desc : Generates real‑time vehicle state reports and stores data in a SQL database.
+	PointCloudClusteringModel
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/Input/DTComponent/Model/NamedIndividual/ConceptInstance
+		sameAs : PointCloudClusteringModel
+		inputTo : DataPreProcessingEnabler
+		desc : Performs DBSCAN clustering on raw point‑cloud data.
+	ACCControlAlgorithmModel
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/Input/DTComponent/Model/NamedIndividual/ConceptInstance
+		sameAs : ACCControlAlgorithmModel
+		inputTo : ControllingEnabler
+		desc : Implements ACC control algorithm fulfilling ISO 15622 requirements.
+	KalmanFilterTrackingModel
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/Input/DTComponent/Model/NamedIndividual/ConceptInstance
+		sameAs : KalmanFilterTrackingModel
+		inputTo : DataPreProcessingEnabler
+		desc : Applies Kalman‑filter tracking to clustered points to produce consistent object tracks.
 ProvidedThings :
-	AdjustDesiredSpeedAction
-		type : NamedIndividual/Action/ConnectionComponent/Thing/ContainedElement/ImplementationThing/DescribedThing/Component/ProvidedThing/AutomaticEnabledThing/TimeScaleThing/ConceptInstance
-		IsAutomatic : false
-		desc : Set desired speed for the ACC subsystem.
-		sameAs : AdjustDesiredSpeedAction
-		providedBy : RemoteManagementService
-	DeliverDesiredSpeedCommandAction
-		type : NamedIndividual/Action/ConnectionComponent/Thing/ContainedElement/ImplementationThing/DescribedThing/Component/ProvidedThing/AutomaticEnabledThing/TimeScaleThing/ConceptInstance
-		IsAutomatic : true
-		desc : Deliver desired speed command from ACC control algorithm to the vehicle.
-		sameAs : DeliverDesiredSpeedCommandAction
-		providedBy : ComputationOffloadingService
-	VehicleTrackInsight
-		type : NamedIndividual/Insight/ConnectionComponent/Thing/ContainedElement/ImplementationThing/DescribedThing/Component/ProvidedThing/TimeScaleThing/ConceptInstance
-		desc : Object tracks and predicted driving path for path planning.
-		sameAs : VehicleTrackInsight
-		providedBy : ComputationOffloadingService/DataMonitoringService
-	PerformanceAnalysisInsight
-		type : NamedIndividual/Insight/ConnectionComponent/Thing/ContainedElement/ImplementationThing/DescribedThing/Component/ProvidedThing/TimeScaleThing/ConceptInstance
-		desc : Analysis of ACC tracking accuracy and control performance informing sensor integration and tuning.
-		sameAs : PerformanceAnalysisInsight
-		providedBy : DataMonitoringService
-	RealTimeVehicleStateInsight
-		type : NamedIndividual/Insight/ConnectionComponent/Thing/ContainedElement/ImplementationThing/DescribedThing/Component/ProvidedThing/TimeScaleThing/ConceptInstance
-		desc : Real‑time report of vehicle state and trajectory enabling anomaly detection.
-		sameAs : RealTimeVehicleStateInsight
-		providedBy : DataMonitoringService
-	EmergencyBrakeAction
-		type : NamedIndividual/Action/ConnectionComponent/Thing/ContainedElement/ImplementationThing/DescribedThing/Component/ProvidedThing/AutomaticEnabledThing/TimeScaleThing/ConceptInstance
-		IsAutomatic : false
-		desc : Trigger emergency braking of the vehicle.
-		sameAs : EmergencyBrakeAction
-		providedBy : RemoteManagementService
 	EnableACCAction
-		type : NamedIndividual/Action/ConnectionComponent/Thing/ContainedElement/ImplementationThing/DescribedThing/Component/ProvidedThing/AutomaticEnabledThing/TimeScaleThing/ConceptInstance
-		IsAutomatic : false
-		desc : Enable or disable the ACC subsystem.
+		type : Action/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/ConnectionComponent/ProvidedThing/AutomaticEnabledThing/TimeScaleThing/NamedIndividual/ConceptInstance
 		sameAs : EnableACCAction
+		desc : Enable or disable the ACC subsystem.
 		providedBy : RemoteManagementService
+		IsAutomatic : false
+	DeliverDesiredSpeedCommandAction
+		type : Action/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/ConnectionComponent/ProvidedThing/AutomaticEnabledThing/TimeScaleThing/NamedIndividual/ConceptInstance
+		sameAs : DeliverDesiredSpeedCommandAction
+		desc : Deliver desired speed command from ACC control algorithm to the vehicle.
+		providedBy : ComputationOffloadingService
+		IsAutomatic : true
+	VehicleTrackInsight
+		type : ContainedElement/ImplementationThing/DescribedThing/Thing/Component/ConnectionComponent/ProvidedThing/TimeScaleThing/Insight/NamedIndividual/ConceptInstance
+		sameAs : VehicleTrackInsight
+		desc : Object tracks and predicted driving path for path planning.
+		providedBy : DataMonitoringService/ComputationOffloadingService
+	EmergencyBrakeAction
+		type : Action/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/ConnectionComponent/ProvidedThing/AutomaticEnabledThing/TimeScaleThing/NamedIndividual/ConceptInstance
+		sameAs : EmergencyBrakeAction
+		desc : Trigger emergency braking of the vehicle.
+		providedBy : RemoteManagementService
+		IsAutomatic : false
+	RealTimeVehicleStateInsight
+		type : ContainedElement/ImplementationThing/DescribedThing/Thing/Component/ConnectionComponent/ProvidedThing/TimeScaleThing/Insight/NamedIndividual/ConceptInstance
+		sameAs : RealTimeVehicleStateInsight
+		desc : Real‑time report of vehicle state and trajectory enabling anomaly detection.
+		providedBy : DataMonitoringService
+	PerformanceAnalysisInsight
+		type : ContainedElement/ImplementationThing/DescribedThing/Thing/Component/ConnectionComponent/ProvidedThing/TimeScaleThing/Insight/NamedIndividual/ConceptInstance
+		sameAs : PerformanceAnalysisInsight
+		desc : Analysis of ACC tracking accuracy and control performance informing sensor integration and tuning.
+		providedBy : DataMonitoringService
+	AdjustDesiredSpeedAction
+		type : Action/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/ConnectionComponent/ProvidedThing/AutomaticEnabledThing/TimeScaleThing/NamedIndividual/ConceptInstance
+		sameAs : AdjustDesiredSpeedAction
+		desc : Set desired speed for the ACC subsystem.
+		providedBy : RemoteManagementService
+		IsAutomatic : false
 Data transmitted :
 	DepthImageDataT
-		type : NamedIndividual/DataTransmitted/ConnectionComponent/Thing/ContainedElement/ImplementationThing/DescribedThing/Component/AutomaticEnabledThing/TimeScaleThing/ConceptInstance
-		producedFrom : IntelD435iDepthCamera
+		type : ContainedElement/ImplementationThing/DescribedThing/Thing/Component/ConnectionComponent/AutomaticEnabledThing/TimeScaleThing/DataTransmitted/NamedIndividual/ConceptInstance
 		sameAs : DepthImageDataT
 		asData : DepthImageData
-	LiDARPointCloudDataT
-		type : NamedIndividual/DataTransmitted/ConnectionComponent/Thing/ContainedElement/ImplementationThing/DescribedThing/Component/AutomaticEnabledThing/TimeScaleThing/ConceptInstance
-		producedFrom : HokuyoLiDAR
-		sameAs : LiDARPointCloudDataT
-		asData : LiDARPointCloudData/ObjectTrackData
-	VehicleSpeedDataT
-		type : NamedIndividual/DataTransmitted/ConnectionComponent/Thing/ContainedElement/ImplementationThing/DescribedThing/Component/AutomaticEnabledThing/TimeScaleThing/ConceptInstance
-		producedFrom : VehicleSpeedSensor
-		sameAs : VehicleSpeedDataT
-		asData : VehicleSpeedSignal
+		producedFrom : IntelD435iDepthCamera
 	VehicleSteeringAngleDataT
-		type : NamedIndividual/DataTransmitted/ConnectionComponent/Thing/ContainedElement/ImplementationThing/DescribedThing/Component/AutomaticEnabledThing/TimeScaleThing/ConceptInstance
-		producedFrom : VehicleSteeringAngleSensor
+		type : ContainedElement/ImplementationThing/DescribedThing/Thing/Component/ConnectionComponent/AutomaticEnabledThing/TimeScaleThing/DataTransmitted/NamedIndividual/ConceptInstance
 		sameAs : VehicleSteeringAngleDataT
 		asData : VehicleSteeringAngleSignal
+		producedFrom : VehicleSteeringAngleSensor
+	LiDARPointCloudDataT
+		type : ContainedElement/ImplementationThing/DescribedThing/Thing/Component/ConnectionComponent/AutomaticEnabledThing/TimeScaleThing/DataTransmitted/NamedIndividual/ConceptInstance
+		sameAs : LiDARPointCloudDataT
+		asData : LiDARPointCloudData/ObjectTrackData
+		producedFrom : HokuyoLiDAR
+	VehicleSpeedDataT
+		type : ContainedElement/ImplementationThing/DescribedThing/Thing/Component/ConnectionComponent/AutomaticEnabledThing/TimeScaleThing/DataTransmitted/NamedIndividual/ConceptInstance
+		sameAs : VehicleSpeedDataT
+		asData : VehicleSpeedSignal
+		producedFrom : VehicleSpeedSensor
 Sensors :
-	IntelD435iDepthCamera
-		type : NamedIndividual/SensingComponent/ConnectionComponent/Thing/ContainedElement/ImplementationThing/DescribedThing/Component/TimeScaleThing/ConceptInstance
-		desc : Intel D435i depth camera providing depth images of the vehicle’s environment.
-		sameAs : IntelD435iDepthCamera
-		producedData : DepthImageDataT
 	HokuyoLiDAR
-		type : NamedIndividual/SensingComponent/ConnectionComponent/Thing/ContainedElement/ImplementationThing/DescribedThing/Component/TimeScaleThing/ConceptInstance
-		desc : Hokuyo UST10LX LiDAR capturing raw point‑cloud data of surrounding vehicles.
+		type : ContainedElement/ImplementationThing/DescribedThing/Thing/Component/ConnectionComponent/TimeScaleThing/SensingComponent/NamedIndividual/ConceptInstance
 		sameAs : HokuyoLiDAR
+		desc : Hokuyo UST10LX LiDAR capturing raw point‑cloud data of surrounding vehicles.
 		producedData : LiDARPointCloudDataT
 	VehicleSpeedSensor
-		type : NamedIndividual/SensingComponent/ConnectionComponent/Thing/ContainedElement/ImplementationThing/DescribedThing/Component/TimeScaleThing/ConceptInstance
-		desc : Provides real‑time vehicle speed data from the onboard speed sensor of the Traxxas Slash 4×4 Premium base.
+		type : ContainedElement/ImplementationThing/DescribedThing/Thing/Component/ConnectionComponent/TimeScaleThing/SensingComponent/NamedIndividual/ConceptInstance
 		sameAs : VehicleSpeedSensor
+		desc : Provides real‑time vehicle speed data from the onboard speed sensor of the Traxxas Slash 4×4 Premium base.
 		producedData : VehicleSpeedDataT
 	VehicleSteeringAngleSensor
-		type : NamedIndividual/SensingComponent/ConnectionComponent/Thing/ContainedElement/ImplementationThing/DescribedThing/Component/TimeScaleThing/ConceptInstance
-		desc : Provides real‑time steering‑angle data from the steering servo of the vehicle.
+		type : ContainedElement/ImplementationThing/DescribedThing/Thing/Component/ConnectionComponent/TimeScaleThing/SensingComponent/NamedIndividual/ConceptInstance
 		sameAs : VehicleSteeringAngleSensor
+		desc : Provides real‑time steering‑angle data from the steering servo of the vehicle.
 		producedData : VehicleSteeringAngleDataT
+	IntelD435iDepthCamera
+		type : ContainedElement/ImplementationThing/DescribedThing/Thing/Component/ConnectionComponent/TimeScaleThing/SensingComponent/NamedIndividual/ConceptInstance
+		sameAs : IntelD435iDepthCamera
+		desc : Intel D435i depth camera providing depth images of the vehicle’s environment.
+		producedData : DepthImageDataT
 System :
 
 System environnement :
 
 Data :
 	DepthImageData
-		type : NamedIndividual/Data/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/Input/ConceptInstance
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/Data/Input/DTComponent/NamedIndividual/ConceptInstance
+		sameAs : DepthImageData
 		fromData : DepthImageDataT
 		inputTo : DataPreProcessingEnabler/DataTranslationEnabler
 		desc : Depth image data received from the Intel D435i camera.
-		sameAs : DepthImageData
-	LiDARPointCloudData
-		type : NamedIndividual/Data/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/Input/ConceptInstance
-		fromData : LiDARPointCloudDataT
-		inputTo : DataPreProcessingEnabler/DataTranslationEnabler
-		desc : Point‑cloud data received from the Hokuyo LiDAR.
-		sameAs : LiDARPointCloudData
-	ObjectTrackData
-		type : NamedIndividual/Data/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/Input/ConceptInstance
-		fromData : LiDARPointCloudDataT
-		inputTo : ControllingEnabler/DataPreProcessingEnabler
-		desc : Clustered and filtered object track data derived from LiDAR point‑cloud.
-		sameAs : ObjectTrackData
-	PredictedPathData
-		type : NamedIndividual/Data/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/Input/ConceptInstance
-		inputTo : ControllingEnabler/VisualizationEnabler
-		desc : Predicted driving path generated by the ACC controller.
-		sameAs : PredictedPathData
-	VehicleSpeedSignal
-		type : NamedIndividual/Data/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/Input/ConceptInstance
-		fromData : VehicleSpeedDataT
-		inputTo : ControllingEnabler/DataTranslationEnabler
-		desc : Vehicle speed signal after serialization and unit conversion.
-		sameAs : VehicleSpeedSignal
 	VehicleSteeringAngleSignal
-		type : NamedIndividual/Data/Thing/DTComponent/FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Component/Input/ConceptInstance
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/Data/Input/DTComponent/NamedIndividual/ConceptInstance
+		sameAs : VehicleSteeringAngleSignal
 		fromData : VehicleSteeringAngleDataT
 		inputTo : ActuationEnabler
 		desc : Vehicle steering‑angle signal after serialization and unit conversion.
-		sameAs : VehicleSteeringAngleSignal
+	VehicleSpeedSignal
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/Data/Input/DTComponent/NamedIndividual/ConceptInstance
+		sameAs : VehicleSpeedSignal
+		fromData : VehicleSpeedDataT
+		inputTo : DataTranslationEnabler/ControllingEnabler
+		desc : Vehicle speed signal after serialization and unit conversion.
+	LiDARPointCloudData
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/Data/Input/DTComponent/NamedIndividual/ConceptInstance
+		sameAs : LiDARPointCloudData
+		fromData : LiDARPointCloudDataT
+		inputTo : DataPreProcessingEnabler/DataTranslationEnabler
+		desc : Point‑cloud data received from the Hokuyo LiDAR.
+	PredictedPathData
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/Data/Input/DTComponent/NamedIndividual/ConceptInstance
+		sameAs : PredictedPathData
+		inputTo : VisualizationEnabler/ControllingEnabler
+		desc : Predicted driving path generated by the ACC controller.
+	ObjectTrackData
+		type : FidelityThing/ContainedElement/ImplementationThing/DescribedThing/Thing/Component/Data/Input/DTComponent/NamedIndividual/ConceptInstance
+		sameAs : ObjectTrackData
+		fromData : LiDARPointCloudDataT
+		inputTo : DataPreProcessingEnabler/ControllingEnabler
+		desc : Clustered and filtered object track data derived from LiDAR point‑cloud.
 Rabbit exchange :
 
 Rabbit route :
